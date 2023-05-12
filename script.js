@@ -1,30 +1,42 @@
-const display = document.querySelector("#display");
-const buttons = document.querySelectorAll("button");
+let celciusInput = document.querySelector('#celsius > input');
+let fahrenheitInput = document.querySelector('#fahrenheit > input');
+let kelvinInput = document.querySelector('#kelvin > input');
 
-buttons.forEach((item) => {
-  item.onclick = () => {
-    if (item.id == "clear") {
-      display.innerText = "";
-    } else if (item.id == "backspace") {
-      let string = display.innerText.toString();
-      display.innerText = string.substr(0, string.length - 1);
-    } else if (display.innerText != "" && item.id == "equal") {
-      display.innerText = eval(display.innerText);
-    } else if (display.innerText == "" && item.id == "equal") {
-      display.innerText = "Empty!";
-      setTimeout(() => (display.innerText = ""), 2000);
-    } else {
-      display.innerText += item.id;
-    }
-  };
+let btn = document.querySelector('.button > button');
+
+function roundNumber(number) {
+  return Math.round(number * 100) / 100;
+}
+
+/* Celsius to Fahrenheit and Kelvin */
+celciusInput.addEventListener('input', function() {
+  let cTemp = parseFloat(celciusInput.value);
+  let fTemp = (cTemp * (9 / 5)) + 32;
+  let kTemp = cTemp + 273.15;
+  fahrenheitInput.value = roundNumber(fTemp);
+  kelvinInput.value = roundNumber(kTemp);
 });
 
-const themeToggleBtn = document.querySelector(".theme-toggler");
-const calculator = document.querySelector(".calculator");
-const toggleIcon = document.querySelector(".toggler-icon");
-let isDark = true;
-themeToggleBtn.onclick = () => {
-  calculator.classList.toggle("dark");
-  themeToggleBtn.classList.toggle("active");
-  isDark = !isDark;
-};
+/* Fahrenheit to Celsius and Kelvin */
+fahrenheitInput.addEventListener('input', function() {
+  let fTemp = parseFloat(fahrenheitInput.value);
+  let cTemp = (fTemp - 32) * (5 / 9);
+  let kTemp = (fTemp - 32) * (5 / 9) + 273.15;
+  celciusInput.value = roundNumber(cTemp);
+  kelvinInput.value = roundNumber(kTemp);
+});
+
+/* Kelvin to Celsius and Fahrenheit */
+kelvinInput.addEventListener('input', function() {
+  let kTemp = parseFloat(kelvinInput.value);
+  let cTemp = kTemp - 273.15;
+  let fTemp = (kTemp - 273.15) * (9 / 5) + 32;
+  celciusInput.value = roundNumber(cTemp);
+  fahrenheitInput.value = roundNumber(fTemp);
+});
+
+btn.addEventListener('click', function() {
+  celciusInput.value = '';
+  fahrenheitInput.value = '';
+  kelvinInput.value = '';
+});
